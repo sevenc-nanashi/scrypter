@@ -9,7 +9,7 @@ def _requires_from_file(filename):
 
 setuptools.setup(
     name="scrypter",
-    version="1.0.0",
+    version="1.0.1",
     author="sevenc_nanashi",
     description="An translator.",
     long_description=long_desc,
