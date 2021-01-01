@@ -1,4 +1,4 @@
-# 7crypter
+# scrypter
 An encrypter.
 
 ## Use with arguments
