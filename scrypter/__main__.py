@@ -72,12 +72,12 @@ def decrypt(text: str, key: str = None):
     return bytes(tmpres).decode("utf8")
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description='this script will encrypt/decrypt text.')
     parser.add_argument('text', help='Text to encrypt/decrypt.', nargs='?')
     group = parser.add_mutually_exclusive_group(required=len(sys.argv) > 1)
-    group.add_argument('-c', '--encrypt', help="do encrypting.",
+    group.add_argument('-e', '--encrypt', help="do encrypting.",
                        action='store_true')
     group.add_argument('-d', '--decrypt',
                        help="do decrypting.", action='store_true')
@@ -85,13 +85,13 @@ if __name__ == "__main__":
         '-k', '--key', help="key for encrypting/decrypting.", required=False)
     args = parser.parse_args()
     if args.text is None:
-        print("Please input (c)rypt or (d)ecrypt: ", end="", flush=True)
+        print("Please input (e)ncrypt or (d)ecrypt: ", end="", flush=True)
         while True:
             c = readchar.readkey()
-            if c.lower() in "cd":
+            if c.lower() in "ed":
                 break
         print(c.lower())
-        if c.lower() == "c":
+        if c.lower() == "e":
             text = input("Please input text to encrypt: ")
             print("Do you want to use key?(y/n): ", end="", flush=True)
             while True:
@@ -126,3 +126,7 @@ if __name__ == "__main__":
             print(encrypt(args.text, args.key))
         elif args.decrypt:
             print(decrypt(args.text, args.key))
+
+
+if __name__ == "__main__":
+    main()
