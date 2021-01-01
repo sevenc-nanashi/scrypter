@@ -4,7 +4,7 @@ An encrypter.
 ## Use with arguments
 
 ```
-usage: __main__.py [-h] [-e | -d] [-k KEY] [text]
+usage: scrypter [-h] [-e | -d] [-k KEY] [text]
 
 this script will encrypt/decrypt text.
 
