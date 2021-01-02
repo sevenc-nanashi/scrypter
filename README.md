@@ -11,7 +11,7 @@ An encrypter.
 ## Use with arguments
 
 ```
-usage: scrypter [-h] [-e | -d] [-k KEY] [text]
+usage: scrypter [-h] [-e | -d | -g] [-k KEY] [text]
 
 this script will encrypt/decrypt text.
 
@@ -22,6 +22,7 @@ optional arguments:
   -h, --help         show this help message and exit
   -e, --encrypt      do encrypting.
   -d, --decrypt      do decrypting.
+  -g, --gui          show gui.
   -k KEY, --key KEY  key for encrypting/decrypting.
 ```
 
