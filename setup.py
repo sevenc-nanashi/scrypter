@@ -1,5 +1,5 @@
 import setuptools
-
+from scrypter import __version__
 with open("README.md", "r", encoding='utf-8') as f:
     long_desc = f.read()
 
@@ -9,7 +9,7 @@ def _requires_from_file(filename):
 
 setuptools.setup(
     name="scrypter",
-    version="1.0.3",
+    version=__version__,
     author="sevenc_nanashi",
     description="An translator.",
     long_description=long_desc,

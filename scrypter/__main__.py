@@ -2,8 +2,11 @@ import random
 import sys
 import readchar
 import argparse
-from colorama import Fore, Back, Style
+import pyperclip
+import webbrowser
+from urllib.parse import urlparse
 
+__version__ = "1.1.2"
 
 def encrypt(text: str, key: str = None):
     """
@@ -70,8 +73,8 @@ def decrypt(text: str, key: str = None):
         tmpres.append(c)
         counter += 1
     return bytes(tmpres).decode("utf8")
-
-
+SEP  = "======================================================="
+SEP2 = "-------------------------------------------------------"
 def main():
     parser = argparse.ArgumentParser(
         description='this script will encrypt/decrypt text.')
@@ -81,31 +84,74 @@ def main():
                        action='store_true')
     group.add_argument('-d', '--decrypt',
                        help="do decrypting.", action='store_true')
+    group.add_argument('-i', '--info',
+                       help="show info.", action='store_true')
     parser.add_argument(
         '-k', '--key', help="key for encrypting/decrypting.", required=False)
     args = parser.parse_args()
     if args.text is None:
-        print("Please input (e)ncrypt or (d)ecrypt: ", end="", flush=True)
+        
+        print(SEP)
+        print(("SCrypter Ver"+__version__).center(len(SEP)))
+        print(SEP)
+        print("Please input (e)ncrypt or (d)ecrypt, or (i)nfo: ", end="", flush=True)
         while True:
             c = readchar.readkey()
-            if c.lower() in "ed":
+            if c.lower() in "edi":
                 break
         print(c.lower())
-        if c.lower() == "e":
+        print(SEP2)
+        if c.lower() == "i":
+            
+            print("SCrypter - Created by 名無し。(@MNoNamer) [1]")
+            print("GitHub : https://github.com/sevenc-nanashi/scrypter [2]")
+            print("Libraries: pyperclip https://github.com/asweigart/pyperclip [3]")
+            print("           readchar https://github.com/magmax/python-readchar [4]")
+            print(SEP2)
+            print("Please input the number to open or (e)xit: ",end="")
+            while True:
+                c = readchar.readkey()
+                if c.lower() in "1234e":
+                    if c.lower() == "1":
+                        webbrowser.open("https://twitter.com/MNoNamer")
+                    elif c.lower() == "2":
+                        webbrowser.open("https://github.com/sevenc-nanashi/scrypter")
+                    elif c.lower() == "3":
+                        webbrowser.open("https://github.com/asweigart/pyperclip")
+                    elif c.lower() == "4":
+                        webbrowser.open("https://github.com/magmax/python-readchar")
+                    elif c.lower() == "e":
+                        print("e")
+                        break
+            
+
+        elif c.lower() == "e":
             text = input("Please input text to encrypt: ")
             print("Do you want to use key?(y/n): ", end="", flush=True)
             while True:
                 c = readchar.readkey()
                 if c.lower() in "yn":
                     break
+            
             print(c.lower())
+            print(SEP2)
             if c.lower() == "y":
                 key = input("Please input key: ")
-                print("The text has successfully encrypted.")
-                print(encrypt(text, key))
+                res = encrypt(text, key)
             else:
-                print("The text has successfully encrypted.")
-                print(encrypt(text))
+                res = encrypt(text)
+            print("The text has successfully encrypted:")
+            print(res)
+            print("Copy it to clipboard?(y/n): ", end="", flush=True)
+            while True:
+                c = readchar.readkey()
+                if c.lower() in "yn":
+                    break
+            print(c.lower())
+            if c.lower() == "y":
+                pyperclip.copy(res)
+                print("Encrypted text has successfully copied.")
+            
         else:
             text = input("Please input encrypted text to decrypt: ")
             print("Did your encrypted text use key?(y/n): ", end="", flush=True)
@@ -116,11 +162,26 @@ def main():
             print(c.lower())
             if c.lower() == "y":
                 key = input("Please input key: ")
-                print("The text has successfully decrypted.")
-                print(decrypt(text, key))
+                
+                res = decrypt(text, key)
             else:
-                print("The text has successfully decrypted.")
-                print(decrypt(text))
+                
+                res = decrypt(text)
+            print(SEP2)
+            print("The text has successfully decrypted:")
+            print(res)
+            o = urlparse(res)
+            if len(o.scheme) > 0:
+                print("URL detected. Open it?(y/n): ", end="", flush=True)
+                while True:
+                    c = readchar.readkey()
+                    if c.lower() in "yn":
+                        break
+                print(c.lower())
+                if c.lower() == "y":
+                    webbrowser.open(res)
+                    print("The URL has successfully opened.")
+                
     else:
         if args.encrypt:
             print(encrypt(args.text, args.key))
