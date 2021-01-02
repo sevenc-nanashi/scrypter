@@ -6,7 +6,8 @@ import pyperclip
 import webbrowser
 from urllib.parse import urlparse
 
-__version__ = "1.1.4"
+__version__ = "1.1.5"
+
 
 def encrypt(text: str, key: str = None):
     """
@@ -35,7 +36,7 @@ def encrypt(text: str, key: str = None):
         if not lkey:
             tmp += ("0" if ri > 0 else "1") + str(abs(ri))
         tmp += str(abs(ec))
-        res += str(len(tmp))+tmp
+        res += str(len(tmp)) + tmp
     return res
 
 
@@ -60,21 +61,25 @@ def decrypt(text: str, key: str = None):
     counter = 0
     while i < len(text):
         l = int(text[i])
-        tmp = text[i+1:i+l+1]
-        i += l+1
+        tmp = text[i + 1:i + l + 1]
+        i += l + 1
         if not tmp:
             break
         if lkey:
             c = int(tmp) - lkey[counter % len(lkey)]
         else:
             pm = 1 if tmp[0] == "0" else -1
-            ri = int(tmp[1])*pm
+            ri = int(tmp[1]) * pm
             c = int(tmp[2:]) - ri
         tmpres.append(c)
         counter += 1
     return bytes(tmpres).decode("utf8")
-SEP  = "======================================================="
+
+
+SEP = "======================================================="
 SEP2 = "-------------------------------------------------------"
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='this script will encrypt/decrypt text.')
@@ -90,11 +95,14 @@ def main():
         '-k', '--key', help="key for encrypting/decrypting.", required=False)
     args = parser.parse_args()
     if args.text is None:
-        
+
         print(SEP)
-        print(("SCrypter Ver"+__version__).center(len(SEP)))
+        print(("SCrypter Ver" + __version__).center(len(SEP)))
         print(SEP)
-        print("Please input (e)ncrypt or (d)ecrypt, or (i)nfo: ", end="", flush=True)
+        print(
+            "Please input (e)ncrypt or (d)ecrypt, or (i)nfo: ",
+            end="",
+            flush=True)
         while True:
             c = readchar.readkey()
             if c.lower() in "edi":
@@ -102,28 +110,35 @@ def main():
         print(c.lower())
         print(SEP2)
         if c.lower() == "i":
-            
+
             print("SCrypter - Created by 名無し。(@MNoNamer) [1]")
             print("GitHub : https://github.com/sevenc-nanashi/scrypter [2]")
-            print("Libraries: pyperclip https://github.com/asweigart/pyperclip [3]")
-            print("           readchar https://github.com/magmax/python-readchar [4]")
+            print(
+                "Libraries: pyperclip https://github.com/asweigart/pyperclip [3]")
+            print(
+                "           readchar https://github.com/magmax/python-readchar [4]")
             print(SEP2)
-            print("Please input the number to open or (e)xit: ",end="", flush=True)
+            print(
+                "Please input the number to open or (e)xit: ",
+                end="",
+                flush=True)
             while True:
                 c = readchar.readkey()
                 if c.lower() in "1234e":
                     if c.lower() == "1":
                         webbrowser.open("https://twitter.com/MNoNamer")
                     elif c.lower() == "2":
-                        webbrowser.open("https://github.com/sevenc-nanashi/scrypter")
+                        webbrowser.open(
+                            "https://github.com/sevenc-nanashi/scrypter")
                     elif c.lower() == "3":
-                        webbrowser.open("https://github.com/asweigart/pyperclip")
+                        webbrowser.open(
+                            "https://github.com/asweigart/pyperclip")
                     elif c.lower() == "4":
-                        webbrowser.open("https://github.com/magmax/python-readchar")
+                        webbrowser.open(
+                            "https://github.com/magmax/python-readchar")
                     elif c.lower() == "e":
                         print("e")
                         break
-            
 
         elif c.lower() == "e":
             text = input("Please input text to encrypt: ")
@@ -132,7 +147,7 @@ def main():
                 c = readchar.readkey()
                 if c.lower() in "yn":
                     break
-            
+
             print(c.lower())
             print(SEP2)
             if c.lower() == "y":
@@ -151,7 +166,7 @@ def main():
             if c.lower() == "y":
                 pyperclip.copy(res)
                 print("Encrypted text has successfully copied.")
-            
+
         else:
             text = input("Please input encrypted text to decrypt: ").strip()
             print("Did your encrypted text use key?(y/n): ", end="", flush=True)
@@ -162,10 +177,10 @@ def main():
             print(c.lower())
             if c.lower() == "y":
                 key = input("Please input key: ")
-                
+
                 res = decrypt(text, key)
             else:
-                
+
                 res = decrypt(text)
             print(SEP2)
             print("The text has successfully decrypted:")
@@ -181,7 +196,7 @@ def main():
                 if c.lower() == "y":
                     webbrowser.open(res)
                     print("The URL has successfully opened.")
-                
+
     else:
         if args.encrypt:
             print(encrypt(args.text, args.key))
