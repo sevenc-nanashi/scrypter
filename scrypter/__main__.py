@@ -4,9 +4,10 @@ import readchar
 import argparse
 import pyperclip
 import webbrowser
+import wx
 from urllib.parse import urlparse
 
-__version__ = "1.1.5"
+__version__ = "1.2.0"
 
 
 def encrypt(text: str, key: str = None):
@@ -76,6 +77,52 @@ def decrypt(text: str, key: str = None):
     return bytes(tmpres).decode("utf8")
 
 
+def gui():
+    app = wx.App()
+    frame = wx.Frame(None, wx.ID_ANY, 'SCrypter', size=(320, 395))
+    frame.SetBackgroundColour((240, 240, 240))
+    tt = wx.StaticText(frame, wx.ID_ANY, 'SCrypter', pos=(5, 5))
+    tt.SetFont(wx.Font(17, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+    mt = wx.TextCtrl(frame, wx.ID_ANY, style=wx.TE_MULTILINE, pos=(5, 35), size=(295, 200))
+    panel = wx.Panel(frame, wx.ID_ANY, pos=(5, 240), style=wx.BORDER_SIMPLE, size=(295, 111))
+    c = wx.Button(panel, wx.ID_ANY, '暗号化', pos=(5, 5), size=(140, 30))
+    r = wx.Button(panel, wx.ID_ANY, '復号', pos=(149, 5), size=(140, 30))
+    kb = wx.ToggleButton(panel, wx.ID_ANY, 'キーを使用', pos=(5, 40), size=(140, 30))
+    kt = wx.TextCtrl(panel, wx.ID_ANY, pos=(149, 41), size=(140, 28))
+    r.Disable()
+    kt.Disable()
+
+    def gui_encrypt(_):
+        mt.SetValue(encrypt(mt.GetValue(), (kt.GetValue() if kb.GetValue() else None)))
+
+    def gui_decrypt(_):
+        try:
+            mt.SetValue(decrypt(mt.GetValue(), (kt.GetValue() if kb.GetValue() else None)))
+        except (ValueError, IndexError):
+            wx.Bell()
+
+    def gui_key_change(_):
+        if kb.GetValue():
+            kt.Enable()
+        else:
+            kt.Disable()
+
+    def gui_textchange(_):
+        if mt.GetValue().isdecimal():
+            r.Enable()
+        else:
+            r.Disable()
+    c.Bind(wx.EVT_BUTTON, gui_encrypt)
+    r.Bind(wx.EVT_BUTTON, gui_decrypt)
+    kb.Bind(wx.EVT_TOGGLEBUTTON, gui_key_change)
+    mt.Bind(wx.EVT_TEXT, gui_textchange)
+
+    e = wx.Button(panel, wx.ID_ANY, '終了', pos=(5, 75), size=(285, 30))
+    e.Bind(wx.EVT_BUTTON, lambda _: exit())
+    frame.Show()
+    app.MainLoop()
+
+
 SEP = "======================================================="
 SEP2 = "-------------------------------------------------------"
 
@@ -89,27 +136,31 @@ def main():
                        action='store_true')
     group.add_argument('-d', '--decrypt',
                        help="do decrypting.", action='store_true')
-    group.add_argument('-i', '--info',
-                       help="show info.", action='store_true')
+    group.add_argument('-g', '--gui',
+                       help="show gui.", action='store_true')
     parser.add_argument(
         '-k', '--key', help="key for encrypting/decrypting.", required=False)
     args = parser.parse_args()
-    if args.text is None:
+    if args.gui:
+        gui()
+    elif args.text is None:
 
         print(SEP)
         print(("SCrypter Ver" + __version__).center(len(SEP)))
         print(SEP)
         print(
-            "Please input (e)ncrypt or (d)ecrypt, or (i)nfo: ",
+            "Please input (e)ncrypt or (d)ecrypt or (i)nfo or (g)ui: ",
             end="",
             flush=True)
         while True:
             c = readchar.readkey()
-            if c.lower() in "edi":
+            if c.lower() in "edig":
                 break
         print(c.lower())
         print(SEP2)
-        if c.lower() == "i":
+        if c.lower() == "g":
+            gui()
+        elif c.lower() == "i":
 
             print("SCrypter - Created by 名無し。(@MNoNamer) [1]")
             print("GitHub : https://github.com/sevenc-nanashi/scrypter [2]")
