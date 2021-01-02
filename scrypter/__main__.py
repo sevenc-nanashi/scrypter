@@ -7,7 +7,7 @@ import webbrowser
 import wx
 from urllib.parse import urlparse
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 
 def encrypt(text: str, key: str = None):
