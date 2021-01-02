@@ -6,7 +6,7 @@ import pyperclip
 import webbrowser
 from urllib.parse import urlparse
 
-__version__ = "1.1.3"
+__version__ = "1.1.4"
 
 def encrypt(text: str, key: str = None):
     """
@@ -153,7 +153,7 @@ def main():
                 print("Encrypted text has successfully copied.")
             
         else:
-            text = input("Please input encrypted text to decrypt: ")
+            text = input("Please input encrypted text to decrypt: ").strip()
             print("Did your encrypted text use key?(y/n): ", end="", flush=True)
             while True:
                 c = readchar.readkey()
