@@ -6,7 +6,7 @@ import pyperclip
 import webbrowser
 from urllib.parse import urlparse
 
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 
 def encrypt(text: str, key: str = None):
     """
@@ -108,7 +108,7 @@ def main():
             print("Libraries: pyperclip https://github.com/asweigart/pyperclip [3]")
             print("           readchar https://github.com/magmax/python-readchar [4]")
             print(SEP2)
-            print("Please input the number to open or (e)xit: ",end="")
+            print("Please input the number to open or (e)xit: ",end="", flush=True)
             while True:
                 c = readchar.readkey()
                 if c.lower() in "1234e":
