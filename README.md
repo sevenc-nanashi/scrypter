@@ -1,5 +1,5 @@
 # scrypter
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/scrypter?style=flat-square)](https://pypi.org/project/scrypter)  
+[![PyPI - Version](https://img.shields.io/pypi/v/scrypter?style=flat-square) ![PyPI - Downloads](https://img.shields.io/pypi/dm/scrypter?style=flat-square)](https://pypi.org/project/scrypter)  
 An encrypter.
 
 ## Example
